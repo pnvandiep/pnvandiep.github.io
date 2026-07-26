@@ -145,7 +145,7 @@
             display: block; 
             margin-bottom: 40px; 
             scroll-margin-top: 80px; 
-            min-height: 80vh; /* FIX LỖI LIỆT NÚT: Bắt buộc mỗi phần phải chiếm ít nhất 80% màn hình */
+            min-height: 80vh; 
         }
         
         /* PROFILE HEADER */
@@ -200,8 +200,10 @@
         .embed-info { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden;}
         .embed-title { font-size: 1rem; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        /* CSS cho Nhạc */
-        .music-timeline { width: 90%; height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+        /* CSS cho Nhạc: Kẹp thời gian 2 bên */
+        .music-time-container { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 4px; }
+        #music-current-time, #music-total-time { font-size: 0.7rem; color: #cbd5e1; font-family: monospace; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .music-timeline { flex: 1; height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
         .timeline-progress { width: 0%; height: 100%; background: #fff; transition: width 0.1s linear; }
         
         .music-disc { 
@@ -307,8 +309,12 @@
             <div class="embed-card">
                 <div class="embed-info">
                     <div class="embed-title" id="music-title">Đang tải nhạc...</div>
-                    <div class="music-timeline">
-                        <div class="timeline-progress" id="music-progress"></div>
+                    <div class="music-time-container">
+                        <span id="music-current-time">00:00</span>
+                        <div class="music-timeline">
+                            <div class="timeline-progress" id="music-progress"></div>
+                        </div>
+                        <span id="music-total-time">00:00</span>
                     </div>
                 </div>
                 <div class="music-disc">
@@ -398,6 +404,16 @@
         const musicTitle = document.getElementById('music-title');
         const musicCover = document.getElementById('music-cover');
         const musicProgress = document.getElementById('music-progress');
+        const musicCurrentTime = document.getElementById('music-current-time');
+        const musicTotalTime = document.getElementById('music-total-time');
+
+        // Hàm format giây thành dạng Phút:Giây (00:00)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
 
         function loadSong(index) {
             let song = playlist[index];
@@ -408,10 +424,16 @@
 
         loadSong(currentSongIndex);
 
+        // Hiển thị tổng thời lượng khi bài hát đã tải xong dữ liệu
+        bgMusic.addEventListener('loadedmetadata', () => {
+            musicTotalTime.innerText = formatTime(bgMusic.duration);
+        });
+
         bgMusic.addEventListener('timeupdate', () => {
             if (bgMusic.duration) {
                 const progressPercent = (bgMusic.currentTime / bgMusic.duration) * 100;
                 musicProgress.style.width = `${progressPercent}%`;
+                musicCurrentTime.innerText = formatTime(bgMusic.currentTime);
             }
         });
 
@@ -440,7 +462,6 @@
             }
         }
 
-        // Dò tìm vị trí cuộn trang để sáng nút tương ứng - Đã chỉnh lại độ nhạy
         const sections = document.querySelectorAll('.scroll-section');
         const tabBtns = document.querySelectorAll('.tab-btn');
 
@@ -469,7 +490,7 @@
         // ================= LANYARD API (TRẠNG THÁI DISCORD) =================
         const discordId = '1055476307372294155';
         const defaultOfflineImg = '68249218-86E9-4EC4-9989-8F1EBC32B02A.jpeg';
-        const defaultOnlineImg = '06E93E45-AFA9-4F93-94D0-6549EDEF64BB.jpeg'; // Ảnh Online tĩnh
+        const defaultOnlineImg = '06E93E45-AFA9-4F93-94D0-6549EDEF64BB.jpeg';
         const ws = new WebSocket('wss://api.lanyard.rest/socket');
 
         ws.onmessage = (event) => {
@@ -503,10 +524,10 @@
 
             if (status !== 'offline') {
                 if (hasActivity) {
-                    dotColor = '#faa61a'; // Vàng
+                    dotColor = '#faa61a'; 
                     dotRgba = '250, 166, 26';
                 } else {
-                    dotColor = '#43b581'; // Xanh lục
+                    dotColor = '#43b581'; 
                     dotRgba = '67, 181, 129';
                 }
                 statusDot.classList.add('online-pulse');
@@ -518,7 +539,6 @@
             statusDot.style.boxShadow = `0 0 8px ${dotColor}`;
             statusDot.style.setProperty('--pulse-color', `rgba(${dotRgba}, 0.7)`);
 
-            // Xử lý Giao diện
             if (hasActivity) {
                 let typeName = activity.type === 2 ? 'Đang nghe' : 'Đang chơi';
                 statusText.innerText = `${typeName} ${activity.name}`;
@@ -534,13 +554,13 @@
                         statusImg.src = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${imgId}.png`;
                     }
                 } else {
-                    statusImg.src = defaultOnlineImg; // Rơi về ảnh Online nếu app ko có icon
+                    statusImg.src = defaultOnlineImg; 
                 }
             } else if (status !== 'offline') {
                 let customStatus = d.activities.find(a => a.type === 4);
                 statusText.innerText = 'Online';
                 statusDetails.innerText = customStatus && customStatus.state ? customStatus.state : 'Đang lướt web...';
-                statusImg.src = defaultOnlineImg; // Bơm ảnh Online vào đây
+                statusImg.src = defaultOnlineImg; 
             } else {
                 statusText.innerText = 'Offline';
                 statusDetails.innerText = 'Đã tắt mạng đi ngủ 💤';
