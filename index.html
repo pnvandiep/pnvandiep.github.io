@@ -87,6 +87,7 @@
 
         .entry-avatar { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
         
+        /* Cải tiến Font chữ ở đây */
         .entry-text h3 { 
             font-family: 'Playfair Display', serif; 
             font-size: 1.5rem; 
@@ -190,8 +191,8 @@
         /* ================= EMBED TỐI GIẢN (NHẠC & TRẠNG THÁI) ================= */
         .embed-card {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 15px; margin-bottom: 12px; /* Khoảng cách giữa 2 thẻ nhỏ lại cho đẹp */
-            background: rgba(0, 0, 0, 0.4); /* Kính đen mờ tối giản */
+            padding: 15px; margin-bottom: 12px; 
+            background: rgba(0, 0, 0, 0.4); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);
@@ -202,10 +203,9 @@
         .embed-info { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden;}
         .embed-title { font-size: 1rem; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        /* CSS cho Nhạc */
+        /* CSS cho Nhạc (Thanh tiến độ giờ được điều khiển bằng JS) */
         .music-timeline { width: 90%; height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
-        .timeline-progress { width: 0%; height: 100%; background: #fff; animation: playMusic 15s linear infinite; }
-        @keyframes playMusic { 0% { width: 0%; } 100% { width: 100%; } }
+        .timeline-progress { width: 0%; height: 100%; background: #fff; transition: width 0.1s linear; }
         
         .music-disc { 
             width: 50px; height: 50px; border-radius: 50%; overflow: hidden; 
@@ -219,7 +219,8 @@
         /* CSS cho Trạng Thái */
         .status-indicator { 
             width: 10px; height: 10px; border-radius: 50%; background: #747f8d; 
-            margin-right: 15px; box-shadow: 0 0 5px #747f8d; flex-shrink: 0;
+            margin-right: 15px; flex-shrink: 0;
+            --pulse-color: rgba(116, 127, 141, 0.7); /* Biến CSS chứa màu phát sáng */
         }
         .status-details { font-size: 0.8rem; color: #cbd5e1; text-shadow: 0 1px 2px rgba(0,0,0,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .status-image { 
@@ -230,11 +231,11 @@
         }
         .status-image img { width: 100%; height: 100%; object-fit: cover; }
         
-        .online-pulse { animation: pulseGreen 2s infinite; }
-        @keyframes pulseGreen { 
-            0% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.7); } 
-            70% { box-shadow: 0 0 0 6px rgba(67, 181, 129, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0); } 
+        .online-pulse { animation: pulseDot 2s infinite; }
+        @keyframes pulseDot { 
+            0% { box-shadow: 0 0 0 0 var(--pulse-color); } 
+            70% { box-shadow: 0 0 0 6px rgba(0, 0, 0, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); } 
         }
 
         /* ABOUT ME & GAME CARDS */
@@ -270,10 +271,8 @@
 </head>
 <body>
 
-    <!-- TRÌNH PHÁT NHẠC (Ẩn) -->
-    <audio id="bg-music" loop>
-        <source src="ScreenRecording_07-26-2026 14-14-30_1.mp3" type="audio/mpeg">
-    </audio>
+    <!-- TRÌNH PHÁT NHẠC (Source đã được chuyển xuống Javascript quản lý) -->
+    <audio id="bg-music" loop></audio>
 
     <!-- MÀN HÌNH CHỜ (Nhấp để vào) -->
     <div id="entry-screen" onclick="enterSite()">
@@ -316,16 +315,16 @@
                 <a href="mailto:hynguyet38@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> hynguyet38@gmail.com</a>
             </div>
 
-            <!-- EMBED 1: NHẠC (Đĩa xoay) -->
+            <!-- EMBED 1: NHẠC (Dữ liệu sẽ được JS tự động bơm vào đây) -->
             <div class="embed-card">
                 <div class="embed-info">
-                    <div class="embed-title">Lost within the end</div>
+                    <div class="embed-title" id="music-title">Đang tải nhạc...</div>
                     <div class="music-timeline">
-                        <div class="timeline-progress"></div>
+                        <div class="timeline-progress" id="music-progress"></div>
                     </div>
                 </div>
                 <div class="music-disc">
-                    <img src="4F1632B1-6FA6-4871-902B-872597BDBE84.jpeg" alt="Music Disc">
+                    <img src="" id="music-cover" alt="Music Disc">
                 </div>
             </div>
 
@@ -402,12 +401,47 @@
 
     </div>
 
-    <!-- JAVASCRIPT: HIỆU ỨNG VÀ TAB -->
+    <!-- JAVASCRIPT: HIỆU ỨNG, NHẠC VÀ LANYARD API -->
     <script>
+        // ================= KHO NHẠC MINI (PLAYLIST) =================
+        // Sau này muốn thêm bài hát, cậu chỉ cần copy 1 khối { } phẩy một cái rồi dán tiếp vào bên dưới
+        const playlist = [
+            {
+                title: "Lost within the end",
+                audioFile: "ScreenRecording_07-26-2026 14-14-30_1.mp3",
+                coverImage: "4F1632B1-6FA6-4871-902B-872597BDBE84.jpeg"
+            }
+        ];
+        
+        let currentSongIndex = 0;
+        const bgMusic = document.getElementById('bg-music');
+        const musicTitle = document.getElementById('music-title');
+        const musicCover = document.getElementById('music-cover');
+        const musicProgress = document.getElementById('music-progress');
+
+        // Hàm tự động tải bài hát lên giao diện
+        function loadSong(index) {
+            let song = playlist[index];
+            bgMusic.src = song.audioFile;
+            musicTitle.innerText = song.title;
+            musicCover.src = song.coverImage;
+        }
+
+        // Tải ngay bài đầu tiên khi web vừa mở
+        loadSong(currentSongIndex);
+
+        // Hàm tính toán và kéo dài thanh tiến trình âm nhạc theo thời gian thực
+        bgMusic.addEventListener('timeupdate', () => {
+            if (bgMusic.duration) {
+                const progressPercent = (bgMusic.currentTime / bgMusic.duration) * 100;
+                musicProgress.style.width = `${progressPercent}%`;
+            }
+        });
+
+        // ================= CHUYỂN TRANG VÀ MỞ NHẠC =================
         function enterSite() {
             const entryScreen = document.getElementById('entry-screen');
             const mainContent = document.getElementById('main-content');
-            const bgMusic = document.getElementById('bg-music');
             
             entryScreen.style.opacity = '0';
             
@@ -442,10 +476,8 @@
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.op === 1) { 
-                // Gửi ID để Lanyard theo dõi
                 ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: discordId } }));
             } else if (data.op === 0) { 
-                // Cập nhật trạng thái
                 updateStatus(data.d);
             }
         };
@@ -456,47 +488,62 @@
             const statusDetails = document.getElementById('status-details');
             const statusImg = document.getElementById('status-img');
 
-            // Bảng màu trạng thái
-            const colors = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' };
             const status = d.discord_status;
-            
-            statusDot.style.background = colors[status] || colors.offline;
-            statusDot.style.boxShadow = `0 0 8px ${colors[status] || colors.offline}`;
-            
-            if (status === 'online') statusDot.classList.add('online-pulse');
-            else statusDot.classList.remove('online-pulse');
+            let hasActivity = false;
+            let activity = null;
 
-            // Xử lý thông tin khi đang chơi game / nghe nhạc
+            // Kiểm tra xem cậu có đang chơi game/nghe nhạc không (bỏ qua Custom Status - type 4)
             if (d.activities && d.activities.length > 0) {
-                // Ưu tiên hiển thị game/nhạc thay vì custom status
-                let activity = d.activities.find(a => a.type !== 4) || d.activities[0];
-                
-                if (activity.type === 4) { // Nếu chỉ có Custom status
-                    statusText.innerText = 'Online';
-                    statusDetails.innerText = activity.state || 'Đang lướt Discord...';
-                    statusImg.src = defaultOfflineImg;
+                activity = d.activities.find(a => a.type !== 4) || d.activities[0];
+                if (activity.type !== 4) {
+                    hasActivity = true;
+                }
+            }
+
+            // Logic Bảng Màu Trạng Thái (Theo yêu cầu: Xám đen, Xanh lục, Vàng)
+            let dotColor = '#747f8d'; // Xám đen (Mặc định cho Offline)
+            let dotRgba = '116, 127, 141';
+
+            if (status !== 'offline') {
+                if (hasActivity) {
+                    dotColor = '#faa61a'; // Vàng (Đang chơi Game / Nghe nhạc)
+                    dotRgba = '250, 166, 26';
                 } else {
-                    let typeName = activity.type === 2 ? 'Đang nghe' : 'Đang chơi';
-                    statusText.innerText = `${typeName} ${activity.name}`;
-                    statusDetails.innerText = activity.details || activity.state || 'Đang hoạt động';
-                    
-                    // Lấy ảnh của ứng dụng (Spotify hoặc Game)
-                    if (activity.assets && activity.assets.large_image) {
-                        let imgId = activity.assets.large_image;
-                        if (imgId.startsWith('spotify:')) {
-                            statusImg.src = `https://i.scdn.co/image/${imgId.split(':')[1]}`;
-                        } else if (imgId.startsWith('mp:external/')) {
-                            statusImg.src = `https://media.discordapp.net/external/${imgId.replace('mp:external/', '')}`;
-                        } else {
-                            statusImg.src = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${imgId}.png`;
-                        }
+                    dotColor = '#43b581'; // Xanh lục (Online lướt web bình thường)
+                    dotRgba = '67, 181, 129';
+                }
+                statusDot.classList.add('online-pulse');
+            } else {
+                statusDot.classList.remove('online-pulse');
+            }
+
+            // Áp dụng màu cho viền, nền và ánh sáng lan toả
+            statusDot.style.background = dotColor;
+            statusDot.style.boxShadow = `0 0 8px ${dotColor}`;
+            statusDot.style.setProperty('--pulse-color', `rgba(${dotRgba}, 0.7)`);
+
+            // Xử lý Text và Hình ảnh
+            if (hasActivity) {
+                let typeName = activity.type === 2 ? 'Đang nghe' : 'Đang chơi';
+                statusText.innerText = `${typeName} ${activity.name}`;
+                statusDetails.innerText = activity.details || activity.state || 'Đang hoạt động';
+                
+                if (activity.assets && activity.assets.large_image) {
+                    let imgId = activity.assets.large_image;
+                    if (imgId.startsWith('spotify:')) {
+                        statusImg.src = `https://i.scdn.co/image/${imgId.split(':')[1]}`;
+                    } else if (imgId.startsWith('mp:external/')) {
+                        statusImg.src = `https://media.discordapp.net/external/${imgId.replace('mp:external/', '')}`;
                     } else {
-                        statusImg.src = defaultOfflineImg; // Trả về ảnh mặc định nếu game không có ảnh
+                        statusImg.src = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${imgId}.png`;
                     }
+                } else {
+                    statusImg.src = defaultOfflineImg; 
                 }
             } else if (status !== 'offline') {
+                let customStatus = d.activities.find(a => a.type === 4);
                 statusText.innerText = 'Online';
-                statusDetails.innerText = 'Đang rảnh...';
+                statusDetails.innerText = customStatus && customStatus.state ? customStatus.state : 'Đang lướt Discord...';
                 statusImg.src = defaultOfflineImg;
             } else {
                 statusText.innerText = 'Offline';
