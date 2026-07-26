@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bio - Diệp</title>
+    <!-- Thư viện Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Nhúng Font: Inter cho nội dung, Playfair Display cho màn hình chờ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= CÀI ĐẶT CHUNG ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #d1d5db 0%, #111827 50%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        /* ================= MÀN HÌNH CHỜ (LOADING/ENTRY) ================= */
+        #entry-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            cursor: pointer;
+        }
+
+        .entry-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 90%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+            100% { transform: scale(1); }
+        }
+
+        .entry-avatar { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
+        
+        /* Cải tiến Font chữ ở đây */
+        .entry-text h3 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.5rem; 
+            margin-bottom: 5px; 
+            color: #f8fafc; 
+            letter-spacing: 1px;
+        }
+        
+        .entry-text p { font-size: 0.9rem; color: #cbd5e1; line-height: 1.4;}
+        .entry-hint { position: absolute; bottom: 40px; font-size: 0.8rem; color: #94a3b8; letter-spacing: 1px; }
+
+        /* ================= NỘI DUNG CHÍNH (MAIN VIEW) ================= */
+        #main-content {
+            display: none;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* THANH MENU (TABS) */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        /* NỘI DUNG CÁC TAB */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.5s ease; }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* PROFILE HEADER (Trong Tab Home) */
+        .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .profile-header img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #8b5cf6; object-fit: cover; }
+        .profile-header h2 { font-size: 1.3rem; margin-bottom: 4px; }
+        .profile-header p { font-size: 0.85rem; color: #a1a1aa; }
+
+        /* NÚT BẤM MẠNG XÃ HỘI */
+        .social-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+        
+        .btn-main {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; padding: 15px; border-radius: 12px;
+            text-decoration: none; color: white; font-weight: 600; font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+        .btn-main:hover { transform: translateY(-3px); }
+        .btn-fb { background: linear-gradient(90deg, #06b6d4, #a855f7); } 
+        .btn-discord { background: #5865F2; }
+
+        .btn-sub {
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0; text-decoration: none; border-radius: 12px; font-size: 0.95rem;
+            transition: background 0.3s;
+        }
+        .btn-sub:hover { background: rgba(255, 255, 255, 0.15); }
+
+        /* ABOUT ME & GAME CARDS */
+        .section-title { font-size: 1.1rem; margin-bottom: 12px; border-left: 3px solid #8b5cf6; padding-left: 10px; }
+        .about-text { font-size: 0.9rem; color: #d1d5db; line-height: 1.6; }
+
+        /* Nâng cấp Game Card thành nút bấm */
+        .game-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 15px;
+        }
+
+        .game-card {
+            display: flex; align-items: center; gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(30,41,59,0.7), rgba(15,23,42,0.7));
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.25s ease;
+        }
+
+        .game-link:hover .game-card {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        /* Hình ảnh đại diện Game */
+        .game-icon {
+            width: 55px; height: 55px; border-radius: 12px;
+            overflow: hidden; /* Bo tròn ảnh bên trong */
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .game-icon img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .game-info h3 { font-size: 1rem; margin-bottom: 3px; }
+        .game-info p { font-size: 0.8rem; color: #94a3b8; }
+        .game-id { font-family: monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 5px; color: #a78bfa;}
+
+        /* Nút mũi tên chuyển hướng */
+        .game-action {
+            margin-left: auto;
+            color: #64748b;
+            font-size: 1.1rem;
+            transition: transform 0.25s ease, color 0.25s;
+        }
+        
+        .game-link:hover .game-action {
+            color: #a855f7;
+            transform: translateX(4px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- TRÌNH PHÁT NHẠC (Ẩn) -->
+    <audio id="bg-music" loop>
+        <source src="ScreenRecording_07-26-2026 14-14-30_1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- MÀN HÌNH CHỜ (Nhấp để vào) -->
+    <div id="entry-screen" onclick="enterSite()">
+        <div class="entry-box">
+            <!-- Ảnh màn hình chờ -->
+            <img src="IMG_0107.jpeg" alt="Avatar" class="entry-avatar">
+            <div class="entry-text">
+                <h3>Diệp</h3>
+                <p>Trưa nay hơi nóng, nếu có cần mua gì thì nhắn anh mua giúp cho nhé ⛅</p>
+            </div>
+        </div>
+        <div class="entry-hint">[ Chạm vào màn hình để tiếp tục ]</div>
+    </div>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div id="main-content">
+        
+        <!-- Thanh chuyển Tab -->
+        <div class="tabs glass-panel" style="padding: 10px;">
+            <button class="tab-btn active" onclick="openTab('home')">Home</button>
+            <button class="tab-btn" onclick="openTab('bio')">Biography</button>
+            <button class="tab-btn" onclick="openTab('game')">Games</button>
+        </div>
+
+        <!-- TAB 1: HOME -->
+        <div id="home" class="tab-content active">
+            <div class="glass-panel profile-header">
+                <!-- Ảnh đại diện chính -->
+                <img src="IMG_0105.jpeg" alt="Profile">
+                <div>
+                    <h2>Vương Dỹ Nguyệt</h2>
+                    <p>Developer & Gamer | Dành cả thanh xuân để code</p>
+                </div>
+            </div>
+
+            <div class="social-buttons">
+                <!-- Link Facebook và Discord thật -->
+                <a href="https://www.facebook.com/share/1FJn6NnrFS/?mibextid=wwXIfr" target="_blank" class="btn-main btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                <a href="https://discord.gg/B5wket4uMF" target="_blank" class="btn-main btn-discord"><i class="fa-brands fa-discord"></i> Discord</a>
+                <a href="mailto:dongmhuong12@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> dongmhuong12@gmail.com</a>
+            </div>
+
+            <div class="glass-panel">
+                <h3 class="section-title">About Me</h3>
+                <p class="about-text">
+                    Hello! Chào mừng bạn đến với góc nhỏ của tớ. Hiện tại tớ đang xây dựng trang web này để lưu giữ những dự án và sở thích cá nhân. Nội dung chi tiết tớ sẽ cập nhật thêm trong thời gian tới nhé! ✨
+                </p>
+            </div>
+        </div>
+
+        <!-- TAB 2: BIOGRAPHY -->
+        <div id="bio" class="tab-content">
+            <div class="glass-panel">
+                <h3 class="section-title">Tiểu sử</h3>
+                <p class="about-text">Phần này dành riêng để cậu viết những câu chuyện dài hơn hoặc mốc thời gian đáng nhớ của bản thân. Nội dung chi tiết có thể được thêm vào sau...</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: GAMES -->
+        <div id="game" class="tab-content">
+            
+            <!-- Liên Quân (Clickable) -->
+            <a href="lienquan://" target="_blank" class="game-link">
+                <div class="game-card">
+                    <div class="game-icon"><img src="Photoroom_20260726_155652.png" alt="Liên Quân"></div>
+                    <div class="game-info">
+                        <h3>Liên Quân Mobile</h3>
+                        <p>IGN: <span class="game-id">ˇswt.Yiyin</span></p>
+                    </div>
+                    <div class="game-action"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </a>
+
+            <!-- Free Fire (Clickable) -->
+            <a href="freefire://" target="_blank" class="game-link">
+                <div class="game-card">
+                    <div class="game-icon"><img src="IMG_0117.jpeg" alt="Free Fire"></div>
+                    <div class="game-info">
+                        <h3>Free Fire</h3>
+                        <p>IGN: <span class="game-id">DiệpCa    万葉</span></p>
+                        <p>ID: <span class="game-id">1166315071</span></p>
+                    </div>
+                    <div class="game-action"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </a>
+
+            <!-- Genshin Impact (Clickable) -->
+            <a href="LINK_HOYOLAB_CUA_CAU" target="_blank" class="game-link">
+                <div class="game-card">
+                    <div class="game-icon"><img src="42BD5B6D-CB59-4369-9040-2129F1EACB6A.jpeg" alt="Genshin Impact"></div>
+                    <div class="game-info">
+                        <h3>Genshin Impact</h3>
+                        <p>IGN: <span class="game-id">Diệp   K万葉.</span></p>
+                        <p>ID: <span class="game-id">828697270</span></p>
+                    </div>
+                    <div class="game-action"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT: HIỆU ỨNG VÀ TAB -->
+    <script>
+        function enterSite() {
+            const entryScreen = document.getElementById('entry-screen');
+            const mainContent = document.getElementById('main-content');
+            const bgMusic = document.getElementById('bg-music');
+            
+            entryScreen.style.opacity = '0';
+            
+            bgMusic.volume = 0.5;
+            bgMusic.play().catch(e => console.log("Lỗi phát nhạc: " + e));
+
+            setTimeout(() => {
+                entryScreen.style.visibility = 'hidden';
+                entryScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+            }, 800);
+        }
+
+        function openTab(tabName) {
+            const contents = document.getElementsByClassName('tab-content');
+            const buttons = document.getElementsByClassName('tab-btn');
+
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+                buttons[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
