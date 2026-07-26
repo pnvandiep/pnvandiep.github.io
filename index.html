@@ -19,26 +19,36 @@
         }
 
         body {
-            background: linear-gradient(180deg, #d1d5db 0%, #111827 50%, #000000 100%);
+            /* Hình nền tĩnh của cậu */
+            background-image: url('59CFAA0F-96E0-4EEF-996E-35697DDFE235.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #0f172a; /* Màu nền dự phòng */
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
+        /* Hiệu ứng kính mờ trong suốt */
         .glass-panel {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.15); /* Nền mờ cực mỏng để thấy ảnh sau */
+            backdrop-filter: blur(8px);      /* Làm nhòe nhẹ ảnh sau lưng để chữ dễ đọc */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
             padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         /* ================= MÀN HÌNH CHỜ (LOADING/ENTRY) ================= */
         #entry-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #0f172a;
+            /* Làm màn hình chờ trong suốt, kết hợp mờ bối cảnh */
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -51,8 +61,8 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 20px;
             border-radius: 16px;
             max-width: 90%;
@@ -62,22 +72,22 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+            50% { transform: scale(1.02); border-color: rgba(255,255,255,0.5); }
             100% { transform: scale(1); }
         }
 
         .entry-avatar { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
         
-        /* Cải tiến Font chữ ở đây */
         .entry-text h3 { 
             font-family: 'Playfair Display', serif; 
             font-size: 1.5rem; 
             margin-bottom: 5px; 
             color: #f8fafc; 
             letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
         
-        .entry-text p { font-size: 0.9rem; color: #cbd5e1; line-height: 1.4;}
+        .entry-text p { font-size: 0.9rem; color: #cbd5e1; line-height: 1.4; text-shadow: 0 1px 3px rgba(0,0,0,0.8);}
         .entry-hint { position: absolute; bottom: 40px; font-size: 0.8rem; color: #94a3b8; letter-spacing: 1px; }
 
         /* ================= NỘI DUNG CHÍNH (MAIN VIEW) ================= */
@@ -92,7 +102,7 @@
 
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* THANH MENU (TABS) */
+        /* THANH MENU (TABS) TRONG SUỐT */
         .tabs {
             display: flex;
             gap: 10px;
@@ -105,21 +115,20 @@
         .tab-btn {
             flex: 1;
             padding: 12px 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #94a3b8;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
-            backdrop-filter: blur(10px);
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
         }
 
         /* NỘI DUNG CÁC TAB */
@@ -131,36 +140,40 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* PROFILE HEADER (Trong Tab Home) */
+        /* PROFILE HEADER */
         .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .profile-header img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #8b5cf6; object-fit: cover; }
-        .profile-header h2 { font-size: 1.3rem; margin-bottom: 4px; }
-        .profile-header p { font-size: 0.85rem; color: #a1a1aa; }
+        .profile-header img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); object-fit: cover; }
+        .profile-header h2 { font-size: 1.3rem; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .profile-header p { font-size: 0.85rem; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
-        /* NÚT BẤM MẠNG XÃ HỘI */
+        /* NÚT BẤM MẠNG XÃ HỘI TRONG SUỐT */
         .social-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
         
         .btn-main {
             display: flex; justify-content: center; align-items: center; gap: 10px;
             width: 100%; padding: 15px; border-radius: 12px;
             text-decoration: none; color: white; font-weight: 600; font-size: 1.1rem;
-            transition: transform 0.2s;
+            background: transparent;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
         }
-        .btn-main:hover { transform: translateY(-3px); }
-        .btn-fb { background: linear-gradient(90deg, #06b6d4, #a855f7); } 
-        .btn-discord { background: #5865F2; }
+        
+        .btn-fb { border: 1px solid #0ea5e9; color: #38bdf8; } 
+        .btn-discord { border: 1px solid #8b5cf6; color: #a78bfa; }
+        
+        .btn-main:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); }
 
         .btn-sub {
             display: flex; justify-content: center; align-items: center; gap: 8px;
-            padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.3);
             color: #e2e8f0; text-decoration: none; border-radius: 12px; font-size: 0.95rem;
             transition: background 0.3s;
         }
-        .btn-sub:hover { background: rgba(255, 255, 255, 0.15); }
+        .btn-sub:hover { background: rgba(255, 255, 255, 0.1); }
 
         /* ABOUT ME & GAME CARDS */
-        .section-title { font-size: 1.1rem; margin-bottom: 12px; border-left: 3px solid #8b5cf6; padding-left: 10px; }
-        .about-text { font-size: 0.9rem; color: #d1d5db; line-height: 1.6; }
+        .section-title { font-size: 1.1rem; margin-bottom: 12px; border-left: 3px solid rgba(255,255,255,0.6); padding-left: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .about-text { font-size: 0.9rem; color: #f8fafc; line-height: 1.6; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
         /* Nâng cấp Game Card thành nút bấm */
         .game-link {
@@ -173,23 +186,26 @@
         .game-card {
             display: flex; align-items: center; gap: 15px;
             padding: 15px;
-            background: linear-gradient(135deg, rgba(30,41,59,0.7), rgba(15,23,42,0.7));
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0, 0, 0, 0.15); /* Nền mờ trong suốt */
+            backdrop-filter: blur(8px);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
             transition: all 0.25s ease;
         }
 
         .game-link:hover .game-card {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
-            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         /* Hình ảnh đại diện Game */
         .game-icon {
             width: 55px; height: 55px; border-radius: 12px;
-            overflow: hidden; /* Bo tròn ảnh bên trong */
+            overflow: hidden; 
             display: flex; justify-content: center; align-items: center;
             background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .game-icon img {
@@ -197,20 +213,20 @@
             object-fit: cover;
         }
 
-        .game-info h3 { font-size: 1rem; margin-bottom: 3px; }
-        .game-info p { font-size: 0.8rem; color: #94a3b8; }
-        .game-id { font-family: monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 5px; color: #a78bfa;}
+        .game-info h3 { font-size: 1rem; margin-bottom: 3px; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+        .game-info p { font-size: 0.8rem; color: #cbd5e1; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        .game-id { font-family: monospace; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 5px; color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 
         /* Nút mũi tên chuyển hướng */
         .game-action {
             margin-left: auto;
-            color: #64748b;
+            color: rgba(255,255,255,0.5);
             font-size: 1.1rem;
             transition: transform 0.25s ease, color 0.25s;
         }
         
         .game-link:hover .game-action {
-            color: #a855f7;
+            color: #fff;
             transform: translateX(4px);
         }
 
@@ -261,7 +277,7 @@
                 <!-- Link Facebook và Discord thật -->
                 <a href="https://www.facebook.com/share/1FJn6NnrFS/?mibextid=wwXIfr" target="_blank" class="btn-main btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>
                 <a href="https://discord.gg/B5wket4uMF" target="_blank" class="btn-main btn-discord"><i class="fa-brands fa-discord"></i> Discord</a>
-                <a href="mailto:dongmhuong12@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> dongmhuong12@gmail.com</a>
+                <a href="mailto:hynguyet38@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> hynguyet38@gmail.com</a>
             </div>
 
             <div class="glass-panel">
