@@ -19,14 +19,14 @@
         }
 
         body {
-            background-color: #0f172a; /* Màu nền dự phòng */
+            background-color: #0f172a; 
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Khắc phục lỗi vệt màu xanh trên iOS Safari bằng lớp nền giả cố định 100% viewport */
+        /* Lớp nền giả cố định 100% viewport */
         body::before {
             content: "";
             position: fixed;
@@ -40,7 +40,7 @@
             z-index: -1; 
         }
 
-        /* Hiệu ứng kính mờ trong suốt (Đã làm tối hơn chút để chữ không bị chìm) */
+        /* Hiệu ứng kính mờ trong suốt */
         .glass-panel {
             background: rgba(0, 0, 0, 0.25); 
             backdrop-filter: blur(10px);      
@@ -55,7 +55,6 @@
         #entry-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* Làm màn hình chờ trong suốt, kết hợp mờ bối cảnh */
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
@@ -88,7 +87,6 @@
 
         .entry-avatar { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
         
-        /* Cải tiến Font chữ ở đây */
         .entry-text h3 { 
             font-family: 'Playfair Display', serif; 
             font-size: 1.5rem; 
@@ -144,7 +142,6 @@
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
-        /* NỘI DUNG CÁC TAB - Giữ nguyên hiệu ứng trượt theo yêu cầu */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: slideUp 0.5s ease; }
         
@@ -159,7 +156,7 @@
         .profile-header h2 { font-size: 1.3rem; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .profile-header p { font-size: 0.85rem; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
-        /* NÚT BẤM MẠNG XÃ HỘI - NÂNG CẤP KÍNH ĐEN MỜ ĐỂ DỄ ĐỌC CHỮ */
+        /* NÚT BẤM MẠNG XÃ HỘI */
         .social-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
         
         .btn-main {
@@ -189,65 +186,85 @@
         }
         .btn-sub:hover { background: rgba(0, 0, 0, 0.6); }
 
+
+        /* ================= EMBED TỐI GIẢN (NHẠC & TRẠNG THÁI) ================= */
+        .embed-card {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 15px; margin-bottom: 12px; /* Khoảng cách giữa 2 thẻ nhỏ lại cho đẹp */
+            background: rgba(0, 0, 0, 0.4); /* Kính đen mờ tối giản */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.3s ease;
+        }
+        .embed-card:hover { background: rgba(0, 0, 0, 0.5); border-color: rgba(255,255,255,0.3); }
+        
+        .embed-info { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden;}
+        .embed-title { font-size: 1rem; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        
+        /* CSS cho Nhạc */
+        .music-timeline { width: 90%; height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+        .timeline-progress { width: 0%; height: 100%; background: #fff; animation: playMusic 15s linear infinite; }
+        @keyframes playMusic { 0% { width: 0%; } 100% { width: 100%; } }
+        
+        .music-disc { 
+            width: 50px; height: 50px; border-radius: 50%; overflow: hidden; 
+            border: 2px solid rgba(255,255,255,0.3); animation: spin 4s linear infinite; 
+            display: flex; justify-content: center; align-items: center; 
+            background: #000; box-shadow: 0 0 10px rgba(0,0,0,0.5); margin-left: 15px; flex-shrink: 0;
+        }
+        .music-disc img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* CSS cho Trạng Thái */
+        .status-indicator { 
+            width: 10px; height: 10px; border-radius: 50%; background: #747f8d; 
+            margin-right: 15px; box-shadow: 0 0 5px #747f8d; flex-shrink: 0;
+        }
+        .status-details { font-size: 0.8rem; color: #cbd5e1; text-shadow: 0 1px 2px rgba(0,0,0,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .status-image { 
+            width: 50px; height: 50px; border-radius: 10px; overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.2); margin-left: 15px; 
+            display: flex; justify-content: center; align-items: center; 
+            background: rgba(0,0,0,0.5); flex-shrink: 0;
+        }
+        .status-image img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .online-pulse { animation: pulseGreen 2s infinite; }
+        @keyframes pulseGreen { 
+            0% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.7); } 
+            70% { box-shadow: 0 0 0 6px rgba(67, 181, 129, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0); } 
+        }
+
         /* ABOUT ME & GAME CARDS */
-        .section-title { font-size: 1.1rem; margin-bottom: 12px; border-left: 3px solid rgba(255,255,255,0.8); padding-left: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .section-title { font-size: 1.1rem; margin-bottom: 12px; margin-top: 15px; border-left: 3px solid rgba(255,255,255,0.8); padding-left: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .about-text { font-size: 0.9rem; color: #f8fafc; line-height: 1.6; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
-        /* Nâng cấp Game Card thành nút bấm */
-        .game-link {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            margin-bottom: 15px;
-        }
-
+        .game-link { display: block; text-decoration: none; color: inherit; margin-bottom: 15px; }
         .game-card {
-            display: flex; align-items: center; gap: 15px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3); /* Nền tối mờ */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.25s ease;
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.25s ease;
         }
-
         .game-link:hover .game-card {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Hình ảnh đại diện Game */
         .game-icon {
-            width: 55px; height: 55px; border-radius: 12px;
-            overflow: hidden; 
+            width: 55px; height: 55px; border-radius: 12px; overflow: hidden; 
             display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .game-icon img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .game-icon img { width: 100%; height: 100%; object-fit: cover; }
 
         .game-info h3 { font-size: 1rem; margin-bottom: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .game-info p { font-size: 0.8rem; color: #cbd5e1; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
         .game-id { font-family: monospace; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 5px; color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Nút mũi tên chuyển hướng */
-        .game-action {
-            margin-left: auto;
-            color: rgba(255,255,255,0.7);
-            font-size: 1.1rem;
-            transition: transform 0.25s ease, color 0.25s;
-        }
-        
-        .game-link:hover .game-action {
-            color: #fff;
-            transform: translateX(4px);
-        }
+        .game-action { margin-left: auto; color: rgba(255,255,255,0.7); font-size: 1.1rem; transition: transform 0.25s ease, color 0.25s; }
+        .game-link:hover .game-action { color: #fff; transform: translateX(4px); }
 
     </style>
 </head>
@@ -299,6 +316,31 @@
                 <a href="mailto:hynguyet38@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> hynguyet38@gmail.com</a>
             </div>
 
+            <!-- EMBED 1: NHẠC (Đĩa xoay) -->
+            <div class="embed-card">
+                <div class="embed-info">
+                    <div class="embed-title">Lost within the end</div>
+                    <div class="music-timeline">
+                        <div class="timeline-progress"></div>
+                    </div>
+                </div>
+                <div class="music-disc">
+                    <img src="4F1632B1-6FA6-4871-902B-872597BDBE84.jpeg" alt="Music Disc">
+                </div>
+            </div>
+
+            <!-- EMBED 2: TRẠNG THÁI DISCORD (Lanyard API) -->
+            <div class="embed-card" style="margin-bottom: 25px;">
+                <div class="status-indicator" id="status-dot"></div>
+                <div class="embed-info">
+                    <div class="embed-title" id="status-text">Đang tải trạng thái...</div>
+                    <div class="status-details" id="status-details">Kết nối Lanyard API...</div>
+                </div>
+                <div class="status-image">
+                    <img src="68249218-86E9-4EC4-9989-8F1EBC32B02A.jpeg" id="status-img" alt="Status Image">
+                </div>
+            </div>
+
             <div class="glass-panel">
                 <h3 class="section-title">About Me</h3>
                 <p class="about-text">
@@ -318,7 +360,7 @@
         <!-- TAB 3: GAMES -->
         <div id="game" class="tab-content">
             
-            <!-- Liên Quân (Mẹo lách luật qua App Store để iOS không báo lỗi) -->
+            <!-- Liên Quân -->
             <a href="https://apps.apple.com/vn/app/garena-li%C3%AAn-qu%C3%A2n-mobile/id1150288115" target="_blank" class="game-link">
                 <div class="game-card">
                     <div class="game-icon"><img src="Photoroom_20260726_155652.png" alt="Liên Quân"></div>
@@ -330,7 +372,7 @@
                 </div>
             </a>
 
-            <!-- Free Fire (Clickable) -->
+            <!-- Free Fire -->
             <a href="freefire://" target="_blank" class="game-link">
                 <div class="game-card">
                     <div class="game-icon"><img src="IMG_0117.jpeg" alt="Free Fire"></div>
@@ -343,7 +385,7 @@
                 </div>
             </a>
 
-            <!-- Genshin Impact (Mở web HoYoLAB) -->
+            <!-- Genshin Impact -->
             <a href="https://act.hoyolab.com/app/community-game-records-sea/m.html?bbs_presentation_style=fullscreen&bbs_auth_required=true&gid=2&user_id=96500835&utm_source=share&utm_medium=hoyolab&uid=96500835&utm_campaign=app#/ys" target="_blank" class="game-link">
                 <div class="game-card">
                     <div class="game-icon"><img src="42BD5B6D-CB59-4369-9040-2129F1EACB6A.jpeg" alt="Genshin Impact"></div>
@@ -390,6 +432,77 @@
 
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
+        }
+
+        // ================= LANYARD API (TRẠNG THÁI DISCORD) =================
+        const discordId = '1055476307372294155';
+        const defaultOfflineImg = '68249218-86E9-4EC4-9989-8F1EBC32B02A.jpeg';
+        const ws = new WebSocket('wss://api.lanyard.rest/socket');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.op === 1) { 
+                // Gửi ID để Lanyard theo dõi
+                ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: discordId } }));
+            } else if (data.op === 0) { 
+                // Cập nhật trạng thái
+                updateStatus(data.d);
+            }
+        };
+
+        function updateStatus(d) {
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            const statusDetails = document.getElementById('status-details');
+            const statusImg = document.getElementById('status-img');
+
+            // Bảng màu trạng thái
+            const colors = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' };
+            const status = d.discord_status;
+            
+            statusDot.style.background = colors[status] || colors.offline;
+            statusDot.style.boxShadow = `0 0 8px ${colors[status] || colors.offline}`;
+            
+            if (status === 'online') statusDot.classList.add('online-pulse');
+            else statusDot.classList.remove('online-pulse');
+
+            // Xử lý thông tin khi đang chơi game / nghe nhạc
+            if (d.activities && d.activities.length > 0) {
+                // Ưu tiên hiển thị game/nhạc thay vì custom status
+                let activity = d.activities.find(a => a.type !== 4) || d.activities[0];
+                
+                if (activity.type === 4) { // Nếu chỉ có Custom status
+                    statusText.innerText = 'Online';
+                    statusDetails.innerText = activity.state || 'Đang lướt Discord...';
+                    statusImg.src = defaultOfflineImg;
+                } else {
+                    let typeName = activity.type === 2 ? 'Đang nghe' : 'Đang chơi';
+                    statusText.innerText = `${typeName} ${activity.name}`;
+                    statusDetails.innerText = activity.details || activity.state || 'Đang hoạt động';
+                    
+                    // Lấy ảnh của ứng dụng (Spotify hoặc Game)
+                    if (activity.assets && activity.assets.large_image) {
+                        let imgId = activity.assets.large_image;
+                        if (imgId.startsWith('spotify:')) {
+                            statusImg.src = `https://i.scdn.co/image/${imgId.split(':')[1]}`;
+                        } else if (imgId.startsWith('mp:external/')) {
+                            statusImg.src = `https://media.discordapp.net/external/${imgId.replace('mp:external/', '')}`;
+                        } else {
+                            statusImg.src = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${imgId}.png`;
+                        }
+                    } else {
+                        statusImg.src = defaultOfflineImg; // Trả về ảnh mặc định nếu game không có ảnh
+                    }
+                }
+            } else if (status !== 'offline') {
+                statusText.innerText = 'Online';
+                statusDetails.innerText = 'Đang rảnh...';
+                statusImg.src = defaultOfflineImg;
+            } else {
+                statusText.innerText = 'Offline';
+                statusDetails.innerText = 'Đã tắt mạng đi ngủ 💤';
+                statusImg.src = defaultOfflineImg;
+            }
         }
     </script>
 
