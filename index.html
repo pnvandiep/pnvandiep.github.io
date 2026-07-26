@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bio - Vạn Diệp</title>
-    <!-- Thư viện Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Nhúng Font: Inter cho nội dung, Playfair Display cho màn hình chờ -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,700&display=swap" rel="stylesheet">
     
     <style>
@@ -142,11 +140,12 @@
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
-        /* Tinh chỉnh cho trang cuộn dài */
+        /* ================= TINH CHỈNH KHỐI TRƯỢT KÉO DÀI THỜI LƯỢNG ================= */
         .tab-content { 
             display: block; 
             margin-bottom: 40px; 
-            scroll-margin-top: 80px; /* Cách thanh menu trên cùng 1 đoạn khi cuộn tới */
+            scroll-margin-top: 80px; 
+            min-height: 80vh; /* FIX LỖI LIỆT NÚT: Bắt buộc mỗi phần phải chiếm ít nhất 80% màn hình */
         }
         
         /* PROFILE HEADER */
@@ -201,7 +200,7 @@
         .embed-info { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden;}
         .embed-title { font-size: 1rem; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        /* CSS cho Nhạc (Thanh tiến độ giờ được điều khiển bằng JS) */
+        /* CSS cho Nhạc */
         .music-timeline { width: 90%; height: 2px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
         .timeline-progress { width: 0%; height: 100%; background: #fff; transition: width 0.1s linear; }
         
@@ -269,13 +268,10 @@
 </head>
 <body>
 
-    <!-- TRÌNH PHÁT NHẠC (Source đã được chuyển xuống Javascript quản lý) -->
     <audio id="bg-music" loop></audio>
 
-    <!-- MÀN HÌNH CHỜ (Nhấp để vào) -->
     <div id="entry-screen" onclick="enterSite()">
         <div class="entry-box">
-            <!-- Ảnh màn hình chờ -->
             <img src="IMG_0107.jpeg" alt="Avatar" class="entry-avatar">
             <div class="entry-text">
                 <h3>Vạn Diệp</h3>
@@ -285,20 +281,16 @@
         <div class="entry-hint">[ Chạm vào màn hình để tiếp tục ]</div>
     </div>
 
-    <!-- NỘI DUNG CHÍNH -->
     <div id="main-content">
         
-        <!-- Thanh chuyển Tab (Hoạt động như nút bấm cuộn mượt) -->
         <div class="tabs glass-panel" style="padding: 10px;">
             <button class="tab-btn active" data-target="home" onclick="scrollToSection('home')">Home</button>
             <button class="tab-btn" data-target="bio" onclick="scrollToSection('bio')">Biography</button>
             <button class="tab-btn" data-target="game" onclick="scrollToSection('game')">Games</button>
         </div>
 
-        <!-- KHỐI 1: HOME -->
         <div id="home" class="tab-content scroll-section">
             <div class="glass-panel profile-header">
-                <!-- Ảnh đại diện chính -->
                 <img src="IMG_0105.jpeg" alt="Profile">
                 <div>
                     <h2>Vương Dỹ Nguyệt</h2>
@@ -307,13 +299,11 @@
             </div>
 
             <div class="social-buttons">
-                <!-- Link Facebook và Discord thật -->
                 <a href="https://www.facebook.com/share/1FJn6NnrFS/?mibextid=wwXIfr" target="_blank" class="btn-main btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>
                 <a href="https://discord.gg/B5wket4uMF" target="_blank" class="btn-main btn-discord"><i class="fa-brands fa-discord"></i> Discord</a>
                 <a href="mailto:hynguyet38@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> hynguyet38@gmail.com</a>
             </div>
 
-            <!-- EMBED 1: NHẠC -->
             <div class="embed-card">
                 <div class="embed-info">
                     <div class="embed-title" id="music-title">Đang tải nhạc...</div>
@@ -326,7 +316,6 @@
                 </div>
             </div>
 
-            <!-- EMBED 2: TRẠNG THÁI DISCORD -->
             <div class="embed-card" style="margin-bottom: 25px;">
                 <div class="status-indicator" id="status-dot"></div>
                 <div class="embed-info">
@@ -346,7 +335,6 @@
             </div>
         </div>
 
-        <!-- KHỐI 2: BIOGRAPHY -->
         <div id="bio" class="tab-content scroll-section">
             <div class="glass-panel">
                 <h3 class="section-title">Tiểu sử</h3>
@@ -354,10 +342,8 @@
             </div>
         </div>
 
-        <!-- KHỐI 3: GAMES -->
         <div id="game" class="tab-content scroll-section">
             
-            <!-- Liên Quân -->
             <a href="https://apps.apple.com/vn/app/garena-li%C3%AAn-qu%C3%A2n-mobile/id1150288115" target="_blank" class="game-link">
                 <div class="game-card">
                     <div class="game-icon"><img src="Photoroom_20260726_155652.png" alt="Liên Quân"></div>
@@ -369,7 +355,6 @@
                 </div>
             </a>
 
-            <!-- Free Fire -->
             <a href="freefire://" target="_blank" class="game-link">
                 <div class="game-card">
                     <div class="game-icon"><img src="IMG_0117.jpeg" alt="Free Fire"></div>
@@ -382,7 +367,6 @@
                 </div>
             </a>
 
-            <!-- Genshin Impact -->
             <a href="https://act.hoyolab.com/app/community-game-records-sea/m.html?bbs_presentation_style=fullscreen&bbs_auth_required=true&gid=2&user_id=96500835&utm_source=share&utm_medium=hoyolab&uid=96500835&utm_campaign=app#/ys" target="_blank" class="game-link">
                 <div class="game-card">
                     <div class="game-icon"><img src="42BD5B6D-CB59-4369-9040-2129F1EACB6A.jpeg" alt="Genshin Impact"></div>
@@ -399,7 +383,6 @@
 
     </div>
 
-    <!-- JAVASCRIPT: HIỆU ỨNG, NHẠC VÀ LANYARD API -->
     <script>
         // ================= KHO NHẠC MINI (PLAYLIST) =================
         const playlist = [
@@ -457,14 +440,14 @@
             }
         }
 
-        // Dò tìm vị trí cuộn trang để sáng nút tương ứng
+        // Dò tìm vị trí cuộn trang để sáng nút tương ứng - Đã chỉnh lại độ nhạy
         const sections = document.querySelectorAll('.scroll-section');
         const tabBtns = document.querySelectorAll('.tab-btn');
 
         const observerOptions = {
             root: null,
-            rootMargin: '-80px 0px -50% 0px', // Tính toán trừ hao đi thanh menu trên cùng
-            threshold: 0
+            rootMargin: '-90px 0px -50% 0px', 
+            threshold: 0.1 
         };
 
         const observer = new IntersectionObserver((entries) => {
