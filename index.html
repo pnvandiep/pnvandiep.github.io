@@ -87,7 +87,6 @@
 
         .entry-avatar { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
         
-        /* Cải tiến Font chữ ở đây */
         .entry-text h3 { 
             font-family: 'Playfair Display', serif; 
             font-size: 1.5rem; 
@@ -143,14 +142,13 @@
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: slideUp 0.5s ease; }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        /* Tinh chỉnh cho trang cuộn dài */
+        .tab-content { 
+            display: block; 
+            margin-bottom: 40px; 
+            scroll-margin-top: 80px; /* Cách thanh menu trên cùng 1 đoạn khi cuộn tới */
         }
-
+        
         /* PROFILE HEADER */
         .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
         .profile-header img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); object-fit: cover; }
@@ -220,7 +218,7 @@
         .status-indicator { 
             width: 10px; height: 10px; border-radius: 50%; background: #747f8d; 
             margin-right: 15px; flex-shrink: 0;
-            --pulse-color: rgba(116, 127, 141, 0.7); /* Biến CSS chứa màu phát sáng */
+            --pulse-color: rgba(116, 127, 141, 0.7); 
         }
         .status-details { font-size: 0.8rem; color: #cbd5e1; text-shadow: 0 1px 2px rgba(0,0,0,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .status-image { 
@@ -290,15 +288,15 @@
     <!-- NỘI DUNG CHÍNH -->
     <div id="main-content">
         
-        <!-- Thanh chuyển Tab -->
+        <!-- Thanh chuyển Tab (Hoạt động như nút bấm cuộn mượt) -->
         <div class="tabs glass-panel" style="padding: 10px;">
-            <button class="tab-btn active" onclick="openTab('home')">Home</button>
-            <button class="tab-btn" onclick="openTab('bio')">Biography</button>
-            <button class="tab-btn" onclick="openTab('game')">Games</button>
+            <button class="tab-btn active" data-target="home" onclick="scrollToSection('home')">Home</button>
+            <button class="tab-btn" data-target="bio" onclick="scrollToSection('bio')">Biography</button>
+            <button class="tab-btn" data-target="game" onclick="scrollToSection('game')">Games</button>
         </div>
 
-        <!-- TAB 1: HOME -->
-        <div id="home" class="tab-content active">
+        <!-- KHỐI 1: HOME -->
+        <div id="home" class="tab-content scroll-section">
             <div class="glass-panel profile-header">
                 <!-- Ảnh đại diện chính -->
                 <img src="IMG_0105.jpeg" alt="Profile">
@@ -315,7 +313,7 @@
                 <a href="mailto:hynguyet38@gmail.com" class="btn-sub"><i class="fa-solid fa-envelope"></i> hynguyet38@gmail.com</a>
             </div>
 
-            <!-- EMBED 1: NHẠC (Dữ liệu sẽ được JS tự động bơm vào đây) -->
+            <!-- EMBED 1: NHẠC -->
             <div class="embed-card">
                 <div class="embed-info">
                     <div class="embed-title" id="music-title">Đang tải nhạc...</div>
@@ -328,7 +326,7 @@
                 </div>
             </div>
 
-            <!-- EMBED 2: TRẠNG THÁI DISCORD (Lanyard API) -->
+            <!-- EMBED 2: TRẠNG THÁI DISCORD -->
             <div class="embed-card" style="margin-bottom: 25px;">
                 <div class="status-indicator" id="status-dot"></div>
                 <div class="embed-info">
@@ -348,16 +346,16 @@
             </div>
         </div>
 
-        <!-- TAB 2: BIOGRAPHY -->
-        <div id="bio" class="tab-content">
+        <!-- KHỐI 2: BIOGRAPHY -->
+        <div id="bio" class="tab-content scroll-section">
             <div class="glass-panel">
                 <h3 class="section-title">Tiểu sử</h3>
                 <p class="about-text">Phần này dành riêng để cậu viết những câu chuyện dài hơn hoặc mốc thời gian đáng nhớ của bản thân. Nội dung chi tiết có thể được thêm vào sau...</p>
             </div>
         </div>
 
-        <!-- TAB 3: GAMES -->
-        <div id="game" class="tab-content">
+        <!-- KHỐI 3: GAMES -->
+        <div id="game" class="tab-content scroll-section">
             
             <!-- Liên Quân -->
             <a href="https://apps.apple.com/vn/app/garena-li%C3%AAn-qu%C3%A2n-mobile/id1150288115" target="_blank" class="game-link">
@@ -404,7 +402,6 @@
     <!-- JAVASCRIPT: HIỆU ỨNG, NHẠC VÀ LANYARD API -->
     <script>
         // ================= KHO NHẠC MINI (PLAYLIST) =================
-        // Sau này muốn thêm bài hát, cậu chỉ cần copy 1 khối { } phẩy một cái rồi dán tiếp vào bên dưới
         const playlist = [
             {
                 title: "Lost within the end",
@@ -419,7 +416,6 @@
         const musicCover = document.getElementById('music-cover');
         const musicProgress = document.getElementById('music-progress');
 
-        // Hàm tự động tải bài hát lên giao diện
         function loadSong(index) {
             let song = playlist[index];
             bgMusic.src = song.audioFile;
@@ -427,10 +423,8 @@
             musicCover.src = song.coverImage;
         }
 
-        // Tải ngay bài đầu tiên khi web vừa mở
         loadSong(currentSongIndex);
 
-        // Hàm tính toán và kéo dài thanh tiến trình âm nhạc theo thời gian thực
         bgMusic.addEventListener('timeupdate', () => {
             if (bgMusic.duration) {
                 const progressPercent = (bgMusic.currentTime / bgMusic.duration) * 100;
@@ -438,7 +432,7 @@
             }
         });
 
-        // ================= CHUYỂN TRANG VÀ MỞ NHẠC =================
+        // ================= CHUYỂN TRANG MỞ NHẠC =================
         function enterSite() {
             const entryScreen = document.getElementById('entry-screen');
             const mainContent = document.getElementById('main-content');
@@ -455,22 +449,44 @@
             }, 800);
         }
 
-        function openTab(tabName) {
-            const contents = document.getElementsByClassName('tab-content');
-            const buttons = document.getElementsByClassName('tab-btn');
-
-            for (let i = 0; i < contents.length; i++) {
-                contents[i].classList.remove('active');
-                buttons[i].classList.remove('active');
+        // ================= CƠ CHẾ CUỘN MƯỢT VÀ SÁNG NÚT MENU =================
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
         }
+
+        // Dò tìm vị trí cuộn trang để sáng nút tương ứng
+        const sections = document.querySelectorAll('.scroll-section');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-80px 0px -50% 0px', // Tính toán trừ hao đi thanh menu trên cùng
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tabBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('data-target') === entry.target.id) {
+                            btn.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(sec => observer.observe(sec));
+
 
         // ================= LANYARD API (TRẠNG THÁI DISCORD) =================
         const discordId = '1055476307372294155';
         const defaultOfflineImg = '68249218-86E9-4EC4-9989-8F1EBC32B02A.jpeg';
+        const defaultOnlineImg = '06E93E45-AFA9-4F93-94D0-6549EDEF64BB.jpeg'; // Ảnh Online tĩnh
         const ws = new WebSocket('wss://api.lanyard.rest/socket');
 
         ws.onmessage = (event) => {
@@ -492,7 +508,6 @@
             let hasActivity = false;
             let activity = null;
 
-            // Kiểm tra xem cậu có đang chơi game/nghe nhạc không (bỏ qua Custom Status - type 4)
             if (d.activities && d.activities.length > 0) {
                 activity = d.activities.find(a => a.type !== 4) || d.activities[0];
                 if (activity.type !== 4) {
@@ -500,16 +515,15 @@
                 }
             }
 
-            // Logic Bảng Màu Trạng Thái (Theo yêu cầu: Xám đen, Xanh lục, Vàng)
-            let dotColor = '#747f8d'; // Xám đen (Mặc định cho Offline)
+            let dotColor = '#747f8d'; 
             let dotRgba = '116, 127, 141';
 
             if (status !== 'offline') {
                 if (hasActivity) {
-                    dotColor = '#faa61a'; // Vàng (Đang chơi Game / Nghe nhạc)
+                    dotColor = '#faa61a'; // Vàng
                     dotRgba = '250, 166, 26';
                 } else {
-                    dotColor = '#43b581'; // Xanh lục (Online lướt web bình thường)
+                    dotColor = '#43b581'; // Xanh lục
                     dotRgba = '67, 181, 129';
                 }
                 statusDot.classList.add('online-pulse');
@@ -517,12 +531,11 @@
                 statusDot.classList.remove('online-pulse');
             }
 
-            // Áp dụng màu cho viền, nền và ánh sáng lan toả
             statusDot.style.background = dotColor;
             statusDot.style.boxShadow = `0 0 8px ${dotColor}`;
             statusDot.style.setProperty('--pulse-color', `rgba(${dotRgba}, 0.7)`);
 
-            // Xử lý Text và Hình ảnh
+            // Xử lý Giao diện
             if (hasActivity) {
                 let typeName = activity.type === 2 ? 'Đang nghe' : 'Đang chơi';
                 statusText.innerText = `${typeName} ${activity.name}`;
@@ -538,13 +551,13 @@
                         statusImg.src = `https://cdn.discordapp.com/app-assets/${activity.application_id}/${imgId}.png`;
                     }
                 } else {
-                    statusImg.src = defaultOfflineImg; 
+                    statusImg.src = defaultOnlineImg; // Rơi về ảnh Online nếu app ko có icon
                 }
             } else if (status !== 'offline') {
                 let customStatus = d.activities.find(a => a.type === 4);
                 statusText.innerText = 'Online';
-                statusDetails.innerText = customStatus && customStatus.state ? customStatus.state : 'Đang lướt Discord...';
-                statusImg.src = defaultOfflineImg;
+                statusDetails.innerText = customStatus && customStatus.state ? customStatus.state : 'Đang lướt web...';
+                statusImg.src = defaultOnlineImg; // Bơm ảnh Online vào đây
             } else {
                 statusText.innerText = 'Offline';
                 statusDetails.innerText = 'Đã tắt mạng đi ngủ 💤';
