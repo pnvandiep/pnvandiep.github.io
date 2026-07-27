@@ -75,13 +75,15 @@ body::before {
 
 .entry-avatar { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
 
+/* TIÊU ĐỀ MÀN HÌNH CHỜ - FONT SANG TRỌNG & LOANG MÀU */
 .entry-text h3 { 
     font-family: 'Playfair Display', serif; 
     font-size: 1.5rem; 
     margin-bottom: 5px; 
-    color: #f8fafc; 
     letter-spacing: 1px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    background: linear-gradient(90deg, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .entry-text p { font-size: 0.9rem; color: #cbd5e1; line-height: 1.4; text-shadow: 0 1px 3px rgba(0,0,0,0.8);}
@@ -111,7 +113,7 @@ body::before {
 
 .tab-btn {
     flex: 1;
-    padding: 12px 0;
+    padding: 12px 5px;
     background: rgba(0, 0, 0, 0.2); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -120,7 +122,8 @@ body::before {
     border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem; /* Đã hạ size chống vỡ */
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Cắt bớt nếu chữ quá dài */
     transition: all 0.3s;
 }
 
@@ -142,25 +145,65 @@ body::before {
 /* PROFILE HEADER */
 .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
 .profile-header img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); object-fit: cover; }
-.profile-header h2 { font-size: 1.3rem; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
+/* TÊN CHÍNH - FONT SANG TRỌNG & LOANG MÀU */
+.profile-header h2 { 
+    font-size: 1.3rem; 
+    margin-bottom: 4px; 
+    font-family: 'Playfair Display', serif;
+    background: linear-gradient(90deg, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .profile-header p { font-size: 0.85rem; color: #e2e8f0; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
-/* NÚT BẤM MẠNG XÃ HỘI */
+
+/* ================= NÚT BẤM (KÈM HIỆU ỨNG VIỀN CHẠY) ================= */
 .social-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
 
+/* Lõi Nút Chính */
+.btn-main, .btn-sub, .bot-btn {
+    position: relative;
+    border: 1px solid transparent; /* Ẩn viền tĩnh để nhường chỗ cho viền động */
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Chống vỡ nút */
+}
+
+/* Hiệu ứng Viền Ánh Sáng Xoay Vòng cho tất cả các nút */
+.btn-main::before, .btn-sub::before, .bot-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px; /* Độ dày của viền sáng */
+    background: linear-gradient(60deg, #ffffff, #64748b, #ffffff, #64748b);
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: move-border 3s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes move-border {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Nút Mạng Xã Hội */
 .btn-main {
     display: flex; justify-content: center; align-items: center; gap: 10px;
     width: 100%; padding: 15px; border-radius: 12px;
-    text-decoration: none; font-weight: 600; font-size: 1.1rem;
+    text-decoration: none; font-weight: 600; 
+    font-size: 0.95rem; /* Đã hạ size */
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     transition: all 0.3s;
 }
 
-.btn-fb { border: 1px solid rgba(14, 165, 233, 0.5); color: #38bdf8; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
-.btn-discord { border: 1px solid rgba(139, 92, 246, 0.5); color: #c084fc; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-
+.btn-fb { color: #38bdf8; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
+.btn-discord { color: #c084fc; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 .btn-main:hover { transform: translateY(-3px); background: rgba(0,0,0,0.6); }
 
 .btn-sub {
@@ -169,8 +212,8 @@ body::before {
     background: rgba(0, 0, 0, 0.4); 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px); 
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #f8fafc; text-decoration: none; border-radius: 12px; font-size: 0.95rem;
+    color: #f8fafc; text-decoration: none; border-radius: 12px; 
+    font-size: 0.85rem; /* Đã hạ size */
     transition: background 0.3s;
 }
 .btn-sub:hover { background: rgba(0, 0, 0, 0.6); }
@@ -229,7 +272,15 @@ body::before {
 }
 
 /* ABOUT ME & GAME CARDS */
-.section-title { font-size: 1.1rem; margin-bottom: 12px; margin-top: 15px; border-left: 3px solid rgba(255,255,255,0.8); padding-left: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+/* TIÊU ĐỀ MỤC - FONT SANG TRỌNG & LOANG MÀU */
+.section-title { 
+    font-size: 1.1rem; margin-bottom: 12px; margin-top: 15px; 
+    border-left: 3px solid rgba(255,255,255,0.8); padding-left: 10px; 
+    font-family: 'Playfair Display', serif;
+    background: linear-gradient(90deg, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .about-text { font-size: 0.9rem; color: #f8fafc; line-height: 1.6; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
 .game-link { display: block; text-decoration: none; color: inherit; margin-bottom: 15px; }
@@ -268,7 +319,15 @@ body::before {
     border-color: rgba(255, 255, 255, 0.4);
 }
 .bot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.bot-name { font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); color: #fff; }
+
+/* TÊN BOT - FONT SANG TRỌNG & LOANG MÀU */
+.bot-name { 
+    font-size: 1.25rem; font-weight: 700; 
+    font-family: 'Playfair Display', serif;
+    background: linear-gradient(90deg, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .bot-avatar { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); }
 
 .bot-desc { font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-bottom: 12px; }
@@ -278,11 +337,13 @@ body::before {
 .bot-actions { display: flex; gap: 10px; }
 .bot-btn {
     flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px;
-    padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none;
+    padding: 10px; border-radius: 8px; 
+    font-size: 0.8rem; /* Đã hạ size */
+    font-weight: 600; text-decoration: none;
     transition: all 0.3s ease; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
-.btn-support { background: rgba(0, 0, 0, 0.5); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); }
+.btn-support { background: rgba(0, 0, 0, 0.5); color: #f8fafc; }
 .btn-support:hover { background: rgba(0, 0, 0, 0.7); }
 
-.btn-invite { background: rgba(88, 101, 242, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
-.btn-invite:hover { background: rgba(88, 101, 242, 0.3); border-color: rgba(139, 92, 246, 0.8); }
+.btn-invite { background: rgba(88, 101, 242, 0.15); color: #c084fc; }
+.btn-invite:hover { background: rgba(88, 101, 242, 0.3); background-color: rgba(139, 92, 246, 0.1); }
