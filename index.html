@@ -266,6 +266,36 @@
         .game-action { margin-left: auto; color: rgba(255,255,255,0.7); font-size: 1.1rem; transition: transform 0.25s ease, color 0.25s; }
         .game-link:hover .game-action { color: #fff; transform: translateX(4px); }
 
+        /* ================= BOT CARDS (MINI PROFILE) ================= */
+        .bot-card {
+            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); padding: 15px; margin-bottom: 20px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .bot-card:hover {
+            transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        .bot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .bot-name { font-size: 1.25rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); color: #fff; }
+        .bot-avatar { width: 55px; height: 55px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); }
+        
+        .bot-desc { font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.8); margin-bottom: 12px; }
+        
+        .bot-banner { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .bot-actions { display: flex; gap: 10px; }
+        .bot-btn {
+            flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px;
+            padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none;
+            transition: all 0.3s ease; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+        .btn-support { background: rgba(0, 0, 0, 0.5); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-support:hover { background: rgba(0, 0, 0, 0.7); }
+        
+        .btn-invite { background: rgba(88, 101, 242, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
+        .btn-invite:hover { background: rgba(88, 101, 242, 0.3); border-color: rgba(139, 92, 246, 0.8); }
+
     </style>
 </head>
 <body>
@@ -385,6 +415,50 @@
                 </div>
             </a>
 
+            <!-- ================= KHU VỰC MY BOTS ================= -->
+            <h3 class="section-title" style="margin-top: 30px;">My Bots</h3>
+
+            <!-- Bot 1: PeiD -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <div class="bot-name">PeiD</div>
+                    <img src="GIF_20260403112554726.gif" alt="PeiD Avatar" class="bot-avatar">
+                </div>
+                <div class="bot-desc">
+                    embed setup bot,<br>
+                    a soft and cute server style
+                </div>
+                <img src="GIF_20260417065032745.gif" alt="PeiD Banner" class="bot-banner">
+                <div class="bot-actions">
+                    <a href="https://discord.gg/B5wket4uMF" target="_blank" class="bot-btn btn-support">
+                        <i class="fa-solid fa-server"></i> Support
+                    </a>
+                    <a href="https://discord.com/oauth2/authorize?client_id=1475879071857508393&permissions=5962311466867792&integration_type=0&scope=bot+applications.commands" target="_blank" class="bot-btn btn-invite">
+                        <i class="fa-solid fa-plus"></i> Invite Bot
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bot 2: Jin -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <div class="bot-name">Jin</div>
+                    <img src="427F33FE-7E40-4218-A401-D473CB4752CB.jpeg" alt="Jin Avatar" class="bot-avatar">
+                </div>
+                <div class="bot-desc">
+                    anti raid - nuke - spam
+                </div>
+                <img src="8C5FEF02-AA1B-4A1F-955E-E73FD2E2817B.jpeg" alt="Jin Banner" class="bot-banner">
+                <div class="bot-actions">
+                    <a href="https://discord.gg/B5wket4uMF" target="_blank" class="bot-btn btn-support">
+                        <i class="fa-solid fa-server"></i> Support
+                    </a>
+                    <a href="https://discord.com/oauth2/authorize?client_id=1489996872453062766&permissions=7882262243166342&integration_type=0&scope=bot+applications.commands" target="_blank" class="bot-btn btn-invite">
+                        <i class="fa-solid fa-plus"></i> Invite Bot
+                    </a>
+                </div>
+            </div>
+            
         </div>
 
     </div>
