@@ -112,7 +112,7 @@
         /* THANH MENU (TABS) TRONG SUỐT ĐÃ ĐƯỢC PHỦ MỜ NHẸ */
         .tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px; /* Giảm gap một xíu để vừa 4 nút */
             margin-bottom: 25px;
             position: sticky;
             top: 20px;
@@ -130,6 +130,7 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.95rem;
             transition: all 0.3s;
         }
 
@@ -319,6 +320,7 @@
             <button class="tab-btn active" data-target="home" onclick="scrollToSection('home')">Home</button>
             <button class="tab-btn" data-target="bio" onclick="scrollToSection('bio')">Biography</button>
             <button class="tab-btn" data-target="game" onclick="scrollToSection('game')">Games</button>
+            <button class="tab-btn" data-target="bot" onclick="scrollToSection('bot')">Bots</button>
         </div>
 
         <div id="home" class="tab-content scroll-section">
@@ -414,9 +416,11 @@
                     <div class="game-action"><i class="fa-solid fa-chevron-right"></i></div>
                 </div>
             </a>
+        </div>
 
-            <!-- ================= KHU VỰC MY BOTS ================= -->
-            <h3 class="section-title" style="margin-top: 30px;">My Bots</h3>
+        <!-- ================= KHU VỰC MY BOTS (TAB MỚI) ================= -->
+        <div id="bot" class="tab-content scroll-section">
+            <h3 class="section-title">My Bots</h3>
 
             <!-- Bot 1: PeiD -->
             <div class="bot-card">
