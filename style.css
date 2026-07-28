@@ -48,9 +48,8 @@ body::before {
     100% { background-position: 0% 0%; }
 }
 
-/* Thêm position relative và ẩn viền tĩnh cũ cho TẤT CẢ các khối */
+/* Thêm position relative và ẩn viền tĩnh cũ cho TẤT CẢ các khối (NGOẠI TRỪ .tab-btn) */
 .glass-panel, 
-.tab-btn, 
 .embed-card, 
 .game-card, 
 .bot-card, 
@@ -62,9 +61,8 @@ body::before {
     border: 1px solid transparent !important; /* Xoá viền gốc để nhường chỗ cho ánh sáng */
 }
 
-/* Cài đặt lớp mặt nạ (Mask) chung cho tất cả các viền */
+/* Cài đặt lớp mặt nạ (Mask) chung cho tất cả các viền (NGOẠI TRỪ .tab-btn) */
 .glass-panel::before, 
-.tab-btn::before, 
 .embed-card::before, 
 .game-card::before, 
 .bot-card::before, 
@@ -85,9 +83,8 @@ body::before {
     pointer-events: none; /* Khách bấm vào khối vẫn bình thường */
 }
 
-/* ÁP DỤNG HIỆU ỨNG CHẠY CHÉO ĐỒNG BỘ CHO TẤT CẢ (MẶC ĐỊNH) */
+/* ÁP DỤNG HIỆU ỨNG CHẠY CHÉO ĐỒNG BỘ CHO TẤT CẢ (NGOẠI TRỪ .tab-btn) */
 .glass-panel::before, 
-.tab-btn::before, 
 .embed-card::before, 
 .game-card::before, 
 .bot-card::before, 
@@ -205,26 +202,31 @@ body::before {
     z-index: 100;
 }
 
+/* TRẠNG THÁI NÚT TAB MẶC ĐỊNH */
 .tab-btn {
     flex: 1;
     padding: 12px 5px;
     background: rgba(0, 0, 0, 0.2); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Viền mờ tĩnh tĩnh lặng */
     color: #94a3b8;
     border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.85rem; 
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-    transition: all 0.3s;
+    transition: all 0.3s ease; /* Chuyển động mượt khi sáng lên */
 }
 
+/* HIỆU ỨNG TỎA SÁNG KHI TAB ĐANG ĐƯỢC CHỌN (ACTIVE) */
 .tab-btn.active {
     background: rgba(255, 255, 255, 0.15);
     color: white;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Bừng sáng đường viền */
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.1); /* Toả ánh sáng mờ ảo ra xung quanh */
 }
+
 
 /* ================= TINH CHỈNH KHỐI TRƯỢT KÉO DÀI THỜI LƯỢNG ================= */
 .tab-content { 
