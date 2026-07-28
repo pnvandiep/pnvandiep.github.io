@@ -28,7 +28,9 @@ body::before {
     z-index: -1; 
 }
 
-/* ================= HIỆU ỨNG VIỀN ÁNH SÁNG CHẠY TOÀN CỤC ================= */
+/* ================= HIỆU ỨNG VIỀN ÁNH SÁNG ================= */
+
+/* 1. Animation Xoay tròn (Dành riêng cho Profile Header) */
 @property --border-angle {
     syntax: "<angle>";
     inherits: true;
@@ -37,6 +39,12 @@ body::before {
 
 @keyframes bg-spin {
     to { --border-angle: 1turn; }
+}
+
+/* 2. Animation Chạy chéo đồng bộ (Dành cho TẤT CẢ các khối còn lại) */
+@keyframes global-sweep-anim {
+    0% { background-position: 200% 200%; }
+    100% { background-position: 0% 0%; }
 }
 
 /* Thêm position relative và ẩn viền tĩnh cũ cho TẤT CẢ các khối */
@@ -53,7 +61,7 @@ body::before {
     border: 1px solid transparent !important; /* Xoá viền gốc để nhường chỗ cho ánh sáng */
 }
 
-/* Tạo vệt sao băng ánh trắng lướt trên đường ray tối */
+/* Cài đặt lớp mặt nạ (Mask) chung cho tất cả các viền */
 .glass-panel::before, 
 .tab-btn::before, 
 .embed-card::before, 
@@ -67,19 +75,50 @@ body::before {
     position: absolute;
     inset: -1px; /* Tràn ra 1px để phủ kín mép viền */
     border-radius: inherit; /* Tự động bo cong mượt mà theo từng khối */
-    padding: 1.5px; /* Độ dày của vệt sáng */
-    background: conic-gradient(
-        from var(--border-angle, 0turn),
-        rgba(255, 255, 255, 0.1) 0%, /* Đường ray tối màu (nhìn như ánh đen mờ) */
-        rgba(255, 255, 255, 0.1) 60%, 
-        rgba(255, 255, 255, 1) 95%, /* Đỉnh sáng trắng tinh */
-        rgba(255, 255, 255, 0.1) 100%
-    );
+    padding: 1.5px; /* Độ dày của viền sáng */
+    
+    /* Thuật toán khoét rỗng ruột, chỉ giữ lại phần viền */
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    animation: bg-spin 5s linear infinite; /* Tốc độ chạy từ từ, mượt mà (5 giây/vòng) */
     pointer-events: none; /* Khách bấm vào khối vẫn bình thường */
+}
+
+/* ÁP DỤNG HIỆU ỨNG CHẠY CHÉO ĐỒNG BỘ CHO TẤT CẢ (MẶC ĐỊNH) */
+.glass-panel::before, 
+.tab-btn::before, 
+.embed-card::before, 
+.game-card::before, 
+.bot-card::before, 
+.btn-main::before, 
+.btn-sub::before, 
+.bot-btn::before, 
+.entry-box::before {
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.1) 40%, 
+        rgba(255, 255, 255, 1) 50%, /* Đỉnh sáng trắng tinh */
+        rgba(255, 255, 255, 0.1) 60%, 
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    background-size: 300% 300%;
+    background-attachment: fixed; /* Neo vào màn hình (viewport) để đồng bộ mọi viền */
+    animation: global-sweep-anim 4s linear infinite; /* Tốc độ quét 4s mượt mà */
+}
+
+/* GHI ĐÈ HIỆU ỨNG XOAY TRÒN - Áp dụng DUY NHẤT cho riêng khung Tên Profile */
+.profile-header::before {
+    background: conic-gradient(
+        from var(--border-angle, 0turn),
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.1) 60%, 
+        rgba(255, 255, 255, 1) 95%, 
+        rgba(255, 255, 255, 0.1) 100%
+    ) !important; /* Dùng important để ưu tiên ghi đè dải chéo */
+    background-size: 100% 100% !important;
+    background-attachment: scroll !important; /* Gỡ neo màn hình */
+    animation: bg-spin 5s linear infinite !important; /* Trả lại hiệu ứng xoay */
 }
 
 
