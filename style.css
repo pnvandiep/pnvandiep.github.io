@@ -41,10 +41,10 @@ body::before {
     to { --border-angle: 1turn; }
 }
 
-/* 2. Animation Chạy chéo đồng bộ (Dành cho TẤT CẢ các khối còn lại) */
+/* 2. Animation Chạy chéo đồng bộ (Vượt ra ngoài màn hình để tránh giật lag) */
 @keyframes global-sweep-anim {
-    0% { background-position: 200% 200%; }
-    100% { background-position: 0% 0%; }
+    0% { background-position: -150vw -150vh; }
+    100% { background-position: 150vw 150vh; }
 }
 
 /* Thêm position relative và ẩn viền tĩnh cũ cho TẤT CẢ các khối */
@@ -94,17 +94,19 @@ body::before {
 .btn-sub::before, 
 .bot-btn::before, 
 .entry-box::before {
+    /* Vệt sáng duy nhất, không lặp lại để khử hoàn toàn lỗi giật màn hình */
     background: linear-gradient(
         135deg, 
         rgba(255, 255, 255, 0.1) 0%, 
-        rgba(255, 255, 255, 0.1) 40%, 
+        rgba(255, 255, 255, 0.1) 48%, 
         rgba(255, 255, 255, 1) 50%, /* Đỉnh sáng trắng tinh */
-        rgba(255, 255, 255, 0.1) 60%, 
+        rgba(255, 255, 255, 0.1) 52%, 
         rgba(255, 255, 255, 0.1) 100%
     );
-    background-size: 300% 300%;
-    background-attachment: fixed; /* Neo vào màn hình (viewport) để đồng bộ mọi viền */
-    animation: global-sweep-anim 4s linear infinite; /* Tốc độ quét 4s mượt mà */
+    background-size: 200vw 200vh;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Neo vào màn hình để đồng bộ mọi viền */
+    animation: global-sweep-anim 10s linear infinite; /* Chậm lại và cực mượt */
 }
 
 /* GHI ĐÈ HIỆU ỨNG XOAY TRÒN - Áp dụng DUY NHẤT cho riêng khung Tên Profile */
@@ -118,9 +120,8 @@ body::before {
     ) !important; /* Dùng important để ưu tiên ghi đè dải chéo */
     background-size: 100% 100% !important;
     background-attachment: scroll !important; /* Gỡ neo màn hình */
-    animation: bg-spin 5s linear infinite !important; /* Trả lại hiệu ứng xoay */
+    animation: bg-spin 5s linear infinite !important; /* Trả lại hiệu ứng xoay độc lập */
 }
-
 
 /* Hiệu ứng kính mờ trong suốt */
 .glass-panel {
